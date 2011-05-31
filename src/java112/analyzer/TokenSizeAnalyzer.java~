@@ -1,0 +1,103 @@
+/*
+ *  Class:  TokenSizeAnalyzer
+ *  Author:  Meg Cole
+ *  Create date: 4/13/2011
+ *  Description:  This class determines the size distribution of the tokens.
+ */
+package java112.analyzer;
+
+import java.util.*;
+import java.io.*;
+
+public class TokenSizeAnalyzer implements Analyzer {
+
+  private Map<Integer, Counter> tokenSizes;
+  private Properties properties;
+  private int maximumSize;
+  //length of each token is the key in Map
+
+  public TokenSizeAnalyzer(Properties properties) {
+        this.properties = properties;
+        tokenSizes = new TreeMap<Integer, Counter>();
+    }
+
+  public Map<Integer, Counter> getTokenSizes() {
+      return tokenSizes;
+  }
+
+  public int getMaximumSize()  {
+      return maximumSize;
+  }
+
+  public void processToken(String token) {
+
+    int tokenSize = token.length();
+    int currentCount = 1;
+
+    if (tokenSizes.containsKey(tokenSize)) {
+      currentCount = tokenSizes.get(tokenSize).getCount();
+      tokenSizes.get(tokenSize).increment();
+    } else {
+      tokenSizes.put(tokenSize, new Counter());
+    }
+
+    if (currentCount > maximumSize) {
+      maximumSize = currentCount;
+    }
+  }
+
+  public void writeOutputFile(String inputFilePath)  {
+    PrintWriter writer = null;
+
+        String outputFilePath = properties.getProperty("output.dir")
+                + properties.getProperty("output.file.token.size");
+
+        try {
+            writer = new PrintWriter(new BufferedWriter(new FileWriter
+                (outputFilePath)));
+
+            for(Map.Entry<Integer, Counter> entry : tokenSizes.entrySet())  {
+                int currentCount = 1;
+                currentCount = tokenSizes.get(entry.getKey()).getCount();
+                writer.print(entry.getKey());
+                writer.print("\t");
+                writer.println(currentCount);
+            }
+
+            for(Map.Entry<Integer, Counter> entry : tokenSizes.entrySet())  {
+                int currentCount = 1;
+                currentCount = tokenSizes.get(entry.getKey()).getCount();
+                float formatNumber;
+                formatNumber = maximumSize / 70;
+                float totalAsterisks;
+                totalAsterisks = currentCount / formatNumber;
+                writer.print(entry.getKey());
+                writer.print("\t");
+                for (int i=0; i< totalAsterisks; i++) {
+                    writer.print("*");
+                }
+                 writer.print("\n");
+            }
+
+        } catch (IOException ioe) {
+            System.out.println ("Error creating name output file.");
+            ioe.printStackTrace();
+        } catch (Exception exception) {
+            System.out.println("Something really bad happened.");
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception closeException) {
+                System.out.println("Something really bad happened.");
+                closeException.printStackTrace();
+            }
+        }
+
+    }
+
+}
+
+//use a float for the hastogram dividing so that at least one asterisk appears.

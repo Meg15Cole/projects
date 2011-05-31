@@ -1,0 +1,9 @@
+author=Meg Cole
+author.email=meg.cole15@gmail.com
+course=Advanced Java
+course.meeting.day=Thursday 5:30PM
+instructor=Jon Forde
+description=This project demonstrates the efforts \
+to master the art of working with Servlets, Properties, etc.
+colors=red, blue, white, purple
+color.values=roses, forget-me-nots, babys breath, violets

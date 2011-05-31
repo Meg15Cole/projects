@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="java.util.*, java.io.*"%>
+<%!
+    private java.util.Properties properties;
+    private Map<String, String> color;
+
+    public void jspInit() {
+        String propertiesFilePath = "/project3.properties";
+        if (properties == null) {
+          properties = new Properties();
+          loadProperties(propertiesFilePath);
+        }
+
+
+
+        ServletConfig config = getServletConfig();
+        ServletContext context = config.getServletContext();
+
+        context.setAttribute("properties", properties);
+        context.getAttribute("properties");
+
+        String colorNames = properties.getProperty("colors");
+        String colorValues = properties.getProperty("color.values");
+
+        String[] colors = colorNames.split(", ");
+        String[] values = colorValues.split(", ");
+
+        color = new TreeMap<String, String>();
+        for(int i=0;i<colors.length;i++){
+            color.put(colors[i], values[i]);
+        }
+
+    }
+
+    public void loadProperties(String propertiesFilePath)  {
+        properties = new java.util.Properties();
+        try {
+            properties.load(this.getClass().getResourceAsStream(
+                + propertiesFilePath));
+        }
+        catch(java.io.IOException ioe) {
+            System.out.println("Can't load the properties file");
+            ioe.printStackTrace();
+        }
+        catch(Exception e) {
+            System.out.println("Problem: " + e);
+            e.printStackTrace();
+        }
+    }
+%>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <link rel="stylesheet" type="text/css" href="variant-dark.css" title="Variant Dark" media="screen,projection" />
+    <title>Project3 Search Results</title>
+  </head>
+
+  <body>
+
+    <div id="topmenu">
+	  <p>
+		<strong class="hide">Main menu:</strong>
+		<a class="active" href="/java112/">Meg's Home Page</a><span class="hide"> | </span>
+		<a href="/java112/Project3HTTPRequests.jsp">HTTP Requests</a><span class="hide"> | </span>
+		<a href="/java112/Project3ProjectInformation.jsp">Project Information</a><span class="hide"> | </span>
+		<a href="/java112/Project3SimpleSearch.jsp">Simple Search</a><span class="hide"> | </span>
+	  </p>
+    </div>
+
+    <div id="header">
+
+	<div id="title">
+
+		<h1>
+		  <a href="/java112/Project3SearchResults.jsp">
+		                            Project 3 SEARCH RESULTS
+		  </a>
+		</h1>
+		<ul>
+		  <li>Project: <%= properties.getProperty("project") %></li>
+		  <li>Author: <%= properties.getProperty("author") %></li>
+		  <li>Current time: <%= new java.util.Date() %></li>
+		</ul>
+	</div>
+</div>
+  <div id="wrap">
+    <p>The Color You Entered: <%
+        String colorInput = request.getParameter("param1");
+          if(colorInput.equals("")) {
+		    out.println(" You did not enter a color. Click on Simple Search"
+		        + "and try again.");
+		  } else {
+		    if(color.containsKey(colorInput))  {
+              out.println(colorInput);
+            } else {
+                 out.println("Color not found: "
+                         + "Please go back to Simple Search and try again");
+             }
+          }
+%>
+     </p>
+     <p>The Value(Flower) Associated With That Color:
+         <%
+            if(color.containsKey(colorInput))  {
+              out.println(color.get(colorInput));
+            } else {
+                 out.println("No value found.");
+             }
+         %>
+     </p>
+  <h2><a href="/java112/">Meg's Token Home Page</a></h2>
+  </div>
+  </body>
+</html>

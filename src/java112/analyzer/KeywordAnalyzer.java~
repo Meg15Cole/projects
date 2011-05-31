@@ -1,0 +1,125 @@
+/*package java112.analyzer;
+
+import java.util.*;
+import java.io.*;
+
+/**
+ *  class KeywordAnalyzer
+ *
+ *@author     Meg Cole
+ */
+ /*public class KeywordAnalyzer implements Analyzer {
+
+   private Map<String, List<Integer>> keywordMap;
+   private Properties properties;
+   private int tokenOccurence;
+
+    /**
+     * Basic constructor for KeywordAnalyzer
+     */
+    /*public KeywordAnalyzer(Properties properties) {
+        this.properties = properties;
+        Map<String, List<Integer>> keywordMap =
+                                        new HashMap<String, List<Integer>>();
+        String keywordFilePath = properties.getProperty("input.file.keyword");
+        readKeywordFile(keywordFilePath);
+        //load the list and place the keywords into the Map.
+    }
+
+    public Map<String, List<Integer>> getKeywordMap()  {
+        return keywordMap;
+    }
+
+    public void readKeywordFile(String keywordFilePath)  {
+
+        BufferedReader input = null;
+        try {
+            input = new BufferedReader(new FileReader(keywordFilePath));
+            while (input.ready()) {
+                String line = null;
+                line = input.readLine();
+                String[] lineTokenArray = line.split(", ");
+                System.out.println(lineTokenArray[0]);
+                for(int i = 0; i<lineTokenArray.length; i++) {
+                    String keyword = lineTokenArray[i];
+                    List<Integer> locList;
+                    keywordMap.put(keyword, locList=new ArrayList<Integer>());
+                }
+            }
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     *  Process each token in input file.
+     *
+     *@param  token  Description of the Parameter
+     */
+    /*public void processToken(String token) {
+        tokenOccurence++;
+
+        if (keywordMap.containsKey(token)) {
+          List<Integer> l = keywordMap.get(token);
+          l.add(tokenOccurence);
+        }
+    }
+
+    /**
+     *  Write report file for KeywordAnalyzer
+     *
+     *@param  inputFilePath   Input file that was analyzed
+     *@param  outputFilePath  Path to output file
+     */
+    /*public void writeOutputFile(String inputFilePath) {
+
+        PrintWriter writer = null;
+
+        String outputFilePath = properties.getProperty("output.dir")
+                + properties.getProperty("output.file.keyword");
+
+        try {
+            writer = new PrintWriter(new BufferedWriter(new FileWriter
+                    (outputFilePath)));
+            for(Map.Entry<String, List<Integer>> entry : keywordMap.entrySet())  {
+                writer.print(entry.getKey());
+                //writer.print(" = [");
+                //writer.println(entry.getValue());
+            }
+
+        } catch (IOException ioe) {
+            System.out.println ("Error creating KeywordAnalyzer output file.");
+            ioe.printStackTrace();
+        } catch (Exception exception) {
+            System.out.println("Something really bad happened.");
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception closeException) {
+                System.out.println("Something really bad happened.");
+                closeException.printStackTrace();
+            }
+        }
+
+    }
+
+
+
+
+
+}*/

@@ -1,0 +1,154 @@
+/*
+ *  Class:  AnalyzeFile
+ *  Author:  Meg Cole
+ *  Create date: 3/10/2011
+ *  Description:  This class contains the methods for running the Analyzers
+ */
+package java112.analyzer;
+
+import java.io.*;
+import java.util.*;
+
+/**
+ *  This class will call the Analyzers to process tokens and create output.
+ *
+ *@author     Meg Cole
+ *@created    March 10, 2011
+ */
+public class AnalyzeFile {
+
+    Properties properties;
+    String inputFilePath;
+    List<Analyzer> analyzers;
+    String passInstanceVariableTest;
+    /**
+     *  Constructor for the AnalyzeFile object
+     */
+    public AnalyzeFile() { }
+
+    /**
+     *  This method will receive the input file name, read the input file, parse it for tokens,
+     *  and call the Analyzers to complete the processing and output for project2.
+     *
+     *@param  arguments  Arguments from the command line
+     */
+    public void runAnalysis(String[] arguments) {
+        if (arguments.length != 2) {
+            System.out.println("Please enter a file name");
+            return;
+        } else {
+            properties = new Properties();
+            inputFilePath = arguments[0];
+
+            loadProperties(arguments[1]);
+            createAnalyzers();
+            readAndAnalyzeFiles();
+            writeAllOutputFiles();
+        }
+    }
+
+    /**
+     *  Instantiates instances of the Analyzers, sending the properties which were loaded.
+     */
+    private void createAnalyzers() {
+
+        analyzers = new ArrayList<Analyzer>();
+
+        analyzers.add(new SummaryReport(properties));
+        analyzers.add(new UniqueTokenAnalyzer(properties));
+        analyzers.add(new BigWordAnalyzer(properties));
+        analyzers.add(new TokenCountAnalyzer(properties));
+    }
+
+
+    /**
+     *  This method will read the input file.
+     */
+    private void readAndAnalyzeFiles() {
+        BufferedReader input = null;
+
+        try {
+
+            input = new BufferedReader(new FileReader(inputFilePath));
+
+            while (input.ready()) {
+                String line = null;
+                line = input.readLine();
+                tokenizeLine(line);
+            }
+
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     *  This method will split the line from the input file into individual words.
+     *
+     *@param  line  This is the variable assigned to the one line read from the input file.
+     */
+    private void tokenizeLine(String line) {
+        String[] lineTokenArray = line.split("\\W");
+        for (int index = 0; index < lineTokenArray.length; index++) {
+            processTokenWithAnalyzers(lineTokenArray[index]);
+        }
+    }
+
+
+    /**
+     *  This method will call each Analyzer to process the token it's received.
+     *
+     *@param  token  This is a single word from the input file.
+     */
+    private void processTokenWithAnalyzers(String token) {
+        if (token.length() > 0) {
+            for (Analyzer analyzer : analyzers) {
+                analyzer.processToken(token);
+
+            }
+        }
+    }
+
+    /**
+     *  This method will call each Analyzer to complete its own output file.
+     */
+    private void writeAllOutputFiles() {
+            for (Analyzer analyzer : analyzers) {
+                analyzer.writeOutputFile(inputFilePath);
+            }
+    }
+
+    /**
+     *  This method will load the specified properties file from the command line into the
+     *  Properties object.
+     */
+    public Properties loadProperties(String propertiesFilePath)  {
+    try {
+        properties.load(this.getClass().getResourceAsStream(propertiesFilePath));
+    }
+    catch(IOException ioe) {
+        System.out.println("Can't load the properties file");
+        ioe.printStackTrace();
+    }
+    catch(Exception e) {
+        System.out.println("Problem: " + e);
+        e.printStackTrace();
+    }
+
+    return properties;
+  }
+}
+

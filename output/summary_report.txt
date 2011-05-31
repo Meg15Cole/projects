@@ -1,0 +1,6 @@
+Application: AnalyzeFile
+Author: Meg Cole
+Author email: meg.cole15@gmail.com
+Input File Path: ./../../bigTestFile.txt
+Analysis Date: Mon May 02 00:34:02 CDT 2011
+Total Token Count: 3543733

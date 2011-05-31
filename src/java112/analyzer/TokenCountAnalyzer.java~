@@ -1,0 +1,86 @@
+package java112.analyzer;
+
+import java.util.*;
+import java.io.*;
+
+/**
+ *  TokenCountAnalzyer
+ *
+ *@author     Meg Cole
+ */
+ public class TokenCountAnalyzer implements Analyzer {
+
+    private Properties properties;
+    private Map<String, Integer> tokenCounts;
+
+    public Map getTokenCounts() {
+        return tokenCounts;
+    }
+
+    /**
+     * Basic constructor for TokenCountAnalyzer
+     */
+    public TokenCountAnalyzer()  {}
+
+    public TokenCountAnalyzer(Properties properties) {
+        this.properties = properties;
+        tokenCounts = new TreeMap<String, Integer>();
+    }
+    /**
+     *  Process each token in input file.
+     *
+     *@param  token  Description of the Parameter
+     */
+    public void processToken(String token) {
+
+        int count = 1;
+
+        if(tokenCounts.containsKey(token))  {
+            count = tokenCounts.get(token);
+            tokenCounts.put(token, ++count);
+        } else {
+            tokenCounts.put(token, count);
+        }
+    }
+
+    /**
+     *  Write report file for name
+     *
+     *@param  inputFilePath   Input file that was analyzed
+     *@param  outputFilePath  Path to output file
+     */
+    public void writeOutputFile(String inputFilePath) {
+
+        PrintWriter writer = null;
+
+        String outputFilePath = properties.getProperty("output.dir")
+                + properties.getProperty("output.file.token.count");
+
+        try {
+            writer = new PrintWriter(new BufferedWriter(new FileWriter
+                (outputFilePath)));
+            for(Map.Entry<String, Integer> entry : tokenCounts.entrySet())  {
+                writer.print(entry.getKey());
+                writer.print("\t");
+                writer.println(entry.getValue());
+            }
+
+        } catch (IOException ioe) {
+            System.out.println ("Error creating name output file.");
+            ioe.printStackTrace();
+        } catch (Exception exception) {
+            System.out.println("Something really bad happened.");
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception closeException) {
+                System.out.println("Something really bad happened.");
+                closeException.printStackTrace();
+            }
+        }
+
+    }
+ }

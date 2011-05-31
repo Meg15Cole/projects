@@ -1,0 +1,78 @@
+package java112.project2;
+
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+/**
+ *  ///////
+ *
+ *@author    Meg Cole
+ */
+public class PropertiesServlet extends HttpServlet {
+
+    Properties properties;
+    StringBuilder names = new StringBuilder();
+    StringBuilder values = new StringBuilder();
+
+    public void init() throws ServletException {
+        properties = new Properties();
+        String inputFilePath = "/project2.properties";
+        loadProperties(inputFilePath);
+        Enumeration e = properties.propertyNames();
+        names.append("<tr>");
+        values.append("<tr>");
+
+        while (e.hasMoreElements()) {
+          String key = (String) e.nextElement();
+          names.append("<th>" + key + "</th>");
+          values.append("<td>" + properties.getProperty(key) + "</td>");
+        }
+         names.append("</tr>");
+         values.append("</tr>");
+    }
+
+    public Properties loadProperties(String propertiesFilePath)  {
+        try {
+            properties.load(this.getClass().getResourceAsStream(
+                + propertiesFilePath));
+        }
+        catch(IOException ioe) {
+            System.out.println("Can't load the properties file");
+            ioe.printStackTrace();
+        }
+        catch(Exception e) {
+            System.out.println("Problem: " + e);
+            e.printStackTrace();
+        }
+
+        return properties;
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+        response.setContentType("text/html");
+
+        PrintWriter  out  = response.getWriter();
+        out.print("<HTML>");
+        out.print("<HEAD>");
+        out.print("<TITLE>PropertiesServlet</TITLE>");
+        out.print("<link rel='stylesheet' type='text/css'"
+                    + "href='/variant-dark.css' title='Variant Dark'"
+                    + "media='screen,projection' />");
+        out.print("</HEAD>");
+        out.print("<BODY>");
+        out.print("<h1>Properties Servlet</h1>");
+        out.print("<p class='slogan'>Meg Cole<br/>Advanced Java 112</p><br />");
+        out.print("<table>" + names + values + "</table>");
+        out.print("<h2><a href='/java112/'>Back to Meg's Home Page</a></h2>");
+        out.print("</BODY>");
+        out.print("</HTML>");
+        out.close();
+
+    }
+
+}
+

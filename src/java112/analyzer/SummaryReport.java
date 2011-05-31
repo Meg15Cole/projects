@@ -1,0 +1,110 @@
+/*
+ *  Class:  SummaryReport
+ *  Author:  Meg Cole
+ *  Create date: 3/10/2011
+ *  Description:  This class creates a summary report
+ */
+package java112.analyzer;
+
+import java.util.*;
+import java.io.*;
+import java.text.*;
+
+/**
+ *  This class will receive tokens, add them to a TreeSet, and create a summary report.
+ *
+ *@author     Meg Cole
+ *@created    February 5, 2011
+ */
+public class SummaryReport implements Analyzer {
+
+    private Properties properties;
+    private Set<String> uniqueTokensList;
+    private int totalTokensCount;
+
+    public SummaryReport() {}
+
+
+    /**
+     *  Constructor for the SummaryReport object
+     */
+    public SummaryReport(Properties properties) {
+        this.properties = properties;
+    }
+
+
+    /**
+     *  Gets the uniqueTokensList attribute of the SummaryReport object
+     *
+     *@return    The uniqueTokensList value
+     */
+    public Set getUniqueTokensList() {
+        return uniqueTokensList;
+    }
+
+
+    /**
+     *  This method receives a token from AnalyzeFile, adds it to the TreeSet, and
+     *  increments the count of each token which has been processed.
+     *
+     *@param  token  One single word from the AnalyzeFile class.
+     */
+    public void processToken(String token) {
+
+        Set<String> uniqueTokensList = new TreeSet<String>();
+        uniqueTokensList.add(token);
+        totalTokensCount++;
+    }
+
+
+    /**
+     *  Gets the totalTokensCount attribute of the SummaryReport object
+     *
+     *@return    The totalTokensCount value
+     */
+    public int getTotalTokensCount() {
+        return totalTokensCount;
+    }
+
+
+    /**
+     *  This method creates the output file containing a summary report of project1.
+     *
+     *@param  inputFilePath   This is the argument passed from the command line for input file.
+     *
+     */
+    public void writeOutputFile(String inputFilePath) {
+        PrintWriter output = null;
+        String outputFilePath = properties.getProperty("output.dir")
+            + properties.getProperty("output.file.summary");
+
+        try {
+            output = new PrintWriter(new BufferedWriter
+                (new FileWriter(outputFilePath)));
+            output.println("Application: "
+                + properties.getProperty("application.name"));
+            output.println("Author: "
+                + properties.getProperty("author"));
+            output.println("Author email: "
+                + properties.getProperty("email"));
+            output.println("Input File Path: " + inputFilePath);
+            output.println("Analysis Date: " + new Date());
+            output.println("Total Token Count: " + getTotalTokensCount());
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                if (output != null) {
+                    output.close();
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+}
+

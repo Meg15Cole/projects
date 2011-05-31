@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+
+    <title></title>
+  </head>
+
+  <body>
+    <h1>Meg's Linking Demo</h1>
+    <br />
+    <a href="http://localhost:8080/index.html">Wrong way to link to home page</a>
+    <br />
+    <a href="/index.html">Another wrong way to link to home page</a>
+    <br />
+    <a href="/">The right way to link to the home page!</a>
+    <br />
+    <a href="/servlet/java112.project2.TrivialServlet">Right way to link to servlets</a>
+  </body>
+</html>
+
+
